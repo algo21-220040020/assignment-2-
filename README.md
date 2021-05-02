@@ -1,35 +1,5 @@
-# High-Frequency Dataset
+Stock prices are formed based on short and/or long-term commercial and trading activities that reflect different frequencies of trading patterns. However, these patterns are often elusive as they are affected by many uncertain politicaleconomic factors in the real world, such as corporate performances, government policies, and even breaking news circulated across markets. Moreover, time series of stock prices are non-stationary and non-linear, making the prediction of future price trends much challenging. To address them, we propose a novel State Frequency Memory (SFM) recurrent network to capture the multi-frequency trading patterns from past market data to make long and short term predictions over time.
 
-This dataset is an example for RL high frequency trading.
+Inspired by Discrete Fourier Transform (DFT), the SFM decomposes the hidden states of memory cells into multiple frequency components, each of which models a particular frequency of latent trading pattern underlying the fluctuation of stock price. Then the future stock prices are predicted as a nonlinear mapping of the combination of these components in an Inverse Fourier Transform (IFT) fashion.
 
-## Get High-Frequency Data
-
-Get high-frequency data by running the following command:
-```bash
-    python workflow.py get_data
-```
-
-## Dump & Reload & Reinitialize the Dataset
-
-
-The High-Frequency Dataset is implemented as `qlib.data.dataset.DatasetH` in the `workflow.py`. `DatatsetH` is the subclass of [`qlib.utils.serial.Serializable`](https://qlib.readthedocs.io/en/latest/advanced/serial.html), whose state can be dumped in or loaded from disk in `pickle` format.
-
-### About Reinitialization
-
-After reloading `Dataset` from disk, `Qlib` also support reinitializing the dataset. It means that users can reset some states of `Dataset` or `DataHandler` such as `instruments`, `start_time`, `end_time` and `segments`, etc.,  and generate new data according to the states.
-
-The example is given in `workflow.py`, users can run the code as follows.
-
-### Run the Code
-
-Run the example by running the following command:
-```bash
-    python workflow.py dump_and_load_dataset
-```
-
-## Benchmarks Performance
-### Signal Test
-Here are the results of signal test for benchmark models. We will keep updating benchmark models in future.
-| Model Name | Dataset | IC | ICIR | Rank IC | Rank ICIR | Long precision| Short Precision | Long-Short Average Return | Long-Short Average Sharpe |
-|---|---|---|---|---|---|---|---|---|---|
-| LightGBM | Alpha158 | 0.3042±0.00 | 1.5372±0.00| 0.3117±0.00 | 1.6258±0.00 | 0.6720±0.00 | 0.6870±0.00 | 0.000769±0.00 | 1.0190±0.00 |
+Modeling multi-frequency trading patterns can enable more accurate predictions for various time ranges: while a shortterm prediction usually depends on high frequency trading patterns, a long-term prediction should focus more on the low frequency trading patterns targeting at long-term return. Unfortunately, no existing model explicitly distinguishes between various frequencies of trading patterns to make dynamic predictions in literature. The experiments on the real market data also demonstrate more competitive performance by the SFM as compared with the state-of-the-art methods.
